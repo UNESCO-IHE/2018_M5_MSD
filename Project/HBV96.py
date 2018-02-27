@@ -3,15 +3,11 @@
 ======
 HBV-96
 ======
-
 Lumped hydrological model.
-
 This is the HBV-96 implementation by Juan Chacon at IHE-Delft, NL. This code
 implements the HBV-96 version, as described in Lindstrom et al (1997)
 https://doi.org/10.1016/S0022-1694(97)00041-3
-
 @author: Juan Carlos Chacon-Hurtado (jc.chaconh@gmail.com)                                  
-
 Version
 -------
 03-05-2017 - V_0.0 - First implementation
@@ -73,14 +69,11 @@ def _precipitation(temp, ltt, utt, prec, rfcf, sfcf, tfac):
     ==============
     Precipitation
     ==============
-
     Precipitaiton routine of the HBV96 model.
-
     If temperature is lower than ltt, all the precipitation is considered as
     snow. If the temperature is higher than utt, all the precipitation is
     considered as rainfall. In case that the temperature is between ltt and
     utt, precipitation is a linear mix of rainfall and snowfall.
-
     Parameters
     ----------
     temp : float
@@ -95,7 +88,6 @@ def _precipitation(temp, ltt, utt, prec, rfcf, sfcf, tfac):
         Rainfall corrector factor
     sfcf : float
         Snowfall corrector factor
-
     Returns
     -------
     _rf : float
@@ -134,7 +126,6 @@ def _snow(cfmax, tfac, temp, ttm, cfr, cwh, _rf, _sf, wc_old, sp_old):
     will become liquid. In the opposite case, the liquid part of the snow will
     refreeze, and turn into solid. The water that cannot be stored by the solid
     part of the snow pack will drain into the soil as part of infiltration.
-
     Parameters
     ----------
     cfmax : float 
@@ -157,7 +148,6 @@ def _snow(cfmax, tfac, temp, ttm, cfr, cwh, _rf, _sf, wc_old, sp_old):
         Water content in previous state [mm]
     sp_old : float 
         snow pack in previous state [mm]
-
     Returns
     -------
     _in : float 
@@ -210,7 +200,6 @@ def _soil(fc, beta, etf, temp, tm, e_corr, lp, tfac, c_flux, inf,
     coming from the liquid precipitation and the snow pack melting. A part of 
     the water will be stored as soil moisture, while other will become runoff, 
     and routed to the upper zone tank.
-
     Parameters
     ----------
     fc : float 
@@ -239,7 +228,6 @@ def _soil(fc, beta, etf, temp, tm, e_corr, lp, tfac, c_flux, inf,
         Previous soil moisture value
     uz_old : float 
         Previous Upper zone value
-
     Returns
     -------
     sm_new : float 
@@ -369,7 +357,6 @@ def _step_run(p, p2, v, St):
     St : array_like [5]
         Previous model states setup as:
         [sp, sm, uz, lz, wc]
-
     Returns
     -------
     q_new : float
@@ -432,10 +419,8 @@ def simulate(avg_prec, temp, et, par, p2, init_st=None, ll_temp=None,
     ========
     Simulate
     ========
-
     Run the HBV model for the number of steps (n) in precipitation. The
     resluts are (n+1) simulation of discharge as the model calculates step n+1
-
     
     Parameters
     ----------
@@ -460,7 +445,6 @@ def simulate(avg_prec, temp, et, par, p2, init_st=None, ll_temp=None,
     q_0 : float, optional
         Initial discharge value. If unspecified set to 10.0
     
-
     Returns
     -------
     q_sim : array_like [n]
@@ -558,7 +542,6 @@ def calibrate(flow, avg_prec, temp, et, p2, init_st=None, ll_temp=None,
     =========
     Calibrate
     =========
-
     Run the calibration of the HBV-96. The calibration is used to estimate the
     optimal set of parameters that minimises the difference between 
     observations and modelled discharge.
@@ -645,4 +628,3 @@ def calibrate(flow, avg_prec, temp, et, p2, init_st=None, ll_temp=None,
     params = par_cal.x
     performance = par_cal.fun
     return params, performance
-

@@ -21,25 +21,27 @@ import HBV96
 import matplotlib.pyplot as plt
 
 # Load the sample data (Prec, evap, T, Q, LAT)
-data = np.loadtxt('SampleData.csv', skiprows=1, delimiter=',')
+data = np.loadtxt('Brue_samp.csv', skiprows=1, delimiter=';')
 
-prec = data[:,0]  #Precipitation
-et = data[:,1]  # Evapotranspiration
-t = data[:,2]  # Temperature
-q = data[:,3]  # Discharge
-lat = data[:,4]  # Long term average temperature
+#data = 
+
+prec = data[:6000,7]  #Precipitation
+et = data[:6000,6]/24.0  # Evapotranspiration
+t = data[:6000,5]  # Temperature
+q = data[:6000,4]  # Discharge
+#lat = data[:,4]  # Long term average temperature
 
 # get random parameter set
 pars = HBV96.get_random_pars()
-p2 = [1.0, 142.0]  # TFAC and Area [Km2]
+p2 = [1.0, 142.0, 1.0]  # TFAC and Area [Km2]
 
-reload(HBV96)
+#reload(HBV96)
 # Run the simulation with the random paramete set
-q_sim, st_sim = HBV96.simulate(prec, t, et, pars, p2, ll_temp=lat)
+q_sim, st_sim = HBV96.simulate(prec, t, et, pars, p2)
 
 # Calibrate the model using simplified algorithm
-pars, perf = HBV96.calibrate(q, prec, t, et, p2, wu=50)
-q_sim, st_sim = HBV96.simulate(prec, t, et, pars, p2, ll_temp=lat, q_0=2.0)
+pars, perf = HBV96.calibrate(q, prec, t, et, p2, wu=50, verbose=True)
+q_sim, st_sim = HBV96.simulate(prec, t, et, pars, p2, q_0=2.0)
 
 plt.plot(q_sim, label='Sim')
 plt.plot(q, label='Rec')
